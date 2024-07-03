@@ -1,0 +1,201 @@
+--
+-- PostgreSQL database dump
+--
+
+-- Dumped from database version 14.12 (Ubuntu 14.12-0ubuntu0.22.04.1)
+-- Dumped by pg_dump version 14.12 (Ubuntu 14.12-0ubuntu0.22.04.1)
+
+SET statement_timeout = 0;
+SET lock_timeout = 0;
+SET idle_in_transaction_session_timeout = 0;
+SET client_encoding = 'UTF8';
+SET standard_conforming_strings = on;
+SELECT pg_catalog.set_config('search_path', '', false);
+SET check_function_bodies = false;
+SET xmloption = content;
+SET client_min_messages = warning;
+SET row_security = off;
+
+--
+-- Name: produto_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.produto_id_seq
+    START WITH 2
+    INCREMENT BY 1
+    MINVALUE 2
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.produto_id_seq OWNER TO postgres;
+
+SET default_tablespace = '';
+
+SET default_table_access_method = heap;
+
+--
+-- Name: produtos; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.produtos (
+    id integer DEFAULT nextval('public.produto_id_seq'::regclass) NOT NULL,
+    nome text,
+    valor double precision,
+    tipo integer,
+    status integer DEFAULT 1
+);
+
+
+ALTER TABLE public.produtos OWNER TO postgres;
+
+--
+-- Name: type_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.type_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.type_id_seq OWNER TO postgres;
+
+--
+-- Name: tipos; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.tipos (
+    id integer DEFAULT nextval('public.type_id_seq'::regclass) NOT NULL,
+    nome text,
+    imposto double precision,
+    status integer DEFAULT 1
+);
+
+
+ALTER TABLE public.tipos OWNER TO postgres;
+
+--
+-- Name: vendas_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.vendas_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.vendas_id_seq OWNER TO postgres;
+
+--
+-- Name: vendas; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.vendas (
+    id integer DEFAULT nextval('public.vendas_id_seq'::regclass) NOT NULL,
+    produtos text,
+    valor_bruto double precision,
+    valor_imposto double precision,
+    valor_liquido double precision,
+    data date
+);
+
+
+ALTER TABLE public.vendas OWNER TO postgres;
+
+--
+-- Data for Name: produtos; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.produtos (id, nome, valor, tipo, status) FROM stdin;
+14	Arroz	8.99	1	1
+15	Feijão	5	1	1
+5	Leite	52.68	1	1
+18	Pão	3	5	1
+\.
+
+
+--
+-- Data for Name: tipos; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.tipos (id, nome, imposto, status) FROM stdin;
+1	Grãos	5	1
+2	Líquido	10	1
+5	Panificação	3	1
+\.
+
+
+--
+-- Data for Name: vendas; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.vendas (id, produtos, valor_bruto, valor_imposto, valor_liquido, data) FROM stdin;
+3	[14, 15]	18.99	0.9495	18.0405	2024-07-02
+5	[14, 8]	131.99	12.749500000000001	119.2405	2024-07-02
+6	[14, 5]	114.35	5.7175	108.6325	2024-07-02
+8	[18, 15, 14]	27.99	1.2195	26.7705	2024-07-02
+\.
+
+
+--
+-- Name: produto_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.produto_id_seq', 18, true);
+
+
+--
+-- Name: type_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.type_id_seq', 5, true);
+
+
+--
+-- Name: vendas_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.vendas_id_seq', 8, true);
+
+
+--
+-- Name: produtos produtos_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.produtos
+    ADD CONSTRAINT produtos_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: tipos tipos_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.tipos
+    ADD CONSTRAINT tipos_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: vendas vendas_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.vendas
+    ADD CONSTRAINT vendas_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: produtos fk_tipo; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.produtos
+    ADD CONSTRAINT fk_tipo FOREIGN KEY (tipo) REFERENCES public.tipos(id) NOT VALID;
+
+
+--
+-- PostgreSQL database dump complete
+--
+
