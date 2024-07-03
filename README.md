@@ -35,3 +35,4 @@ Você vai conseguir acessar o sistema via http://localhost:3000
 ### Observações
 
 - O dump do banco está na raiz do projeto com nome `mercadodb.bak`
+- No meu ambiente, o nome da base de dados é mercado, usuario postgres e senha mercado
